@@ -23,6 +23,7 @@ fi
 module_regex="${2:-drupal/*}"
 composer="${COMPOSER_BIN:=$(which composer)}"
 php="${PHP_BIN:=$(which php)}"
+drush="${DRUSH_BIN:=./vendor/bin/drush}"
 
 # @description
 # an entry point func
@@ -95,9 +96,11 @@ function get_updatable_modules() {
 #
 # @exitcode 0 if all files exist
 function check_binaries() {
-    for i in $c $php; do
+    for i in $c $php $drush; do
         if [ ! -e $i ]; then
-            echo "$i doesn't exists"
+            echo -e "${RED} $i doesn't exists${NC}"
+            echo "You can define a custom path for it, with env variable"
+            echo -e "e.g ${GREEN}PHP_BIN=/usr/bin/php73 ~/update.sh feature-branch \"drupal/*\"${NC}"
             exit 2
         fi;
     done
